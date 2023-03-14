@@ -45,29 +45,11 @@ public class UserManager {
 	
 	
 
-//	String input(String message) {
-//		System.out.print(message + " : ");
-//		String id = scan.next();
-//		return id;
-//	}
+
 //	
-//	boolean checkDupl(String id) {
-//		boolean check = true;
-//		
-//		for(int i=0; i<count; i++) {
-//			if(id.equals(this.idpw[i][0])) {
-//				check = false;
-//			}
-//		}
-//		return check;
-//	}
+
 //	
-//	boolean isLoggedIn() {
-//		if(this.log != -1) {
-//			return false;
-//		}
-//		return true;
-//	}
+
 //	
 //	void addUser() {
 //		
