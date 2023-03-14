@@ -4,17 +4,16 @@ import java.util.ArrayList;
 
 public class User {
 	private String id, password, name;
-	
-	// new 객체가 아님 -> AccountManager.list 안에 있는 인스턴스
-	// 원본은 static list 안에 있음
-	// 
 	private ArrayList<Account> accs;
-	
+
 	public User(String id, String password, String name) {
 		this.id = id;
 		this.password = password;
 		this.name = name;
 	}
+	
+	// new 객체가 아님 -> AccountManager.list 안에 있는 인스턴스
+	// 원본은 static list 안에 있음
 	
 	public String getId() {
 		return this.id;

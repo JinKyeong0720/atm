@@ -9,14 +9,14 @@ public class Account {
 	private int money;
 	private int code;
 	
-	public Account(String account, int money) {
+	public Account(String userId, String account, int money) {
+		this.userId = userId;
 		this.accNum = account;
 		this.money = money;
 	}
-	
-	public Account(int code, int money) {
-		this.code = code;
-		this.money = money;
+
+	public String userId() {
+		return this.userId;
 	}
 	
 	public String account() {
@@ -27,6 +27,10 @@ public class Account {
 		return this.money;
 	}
 	
+	public String getUserId() {
+		return this.userId;
+	}
+	
 	public String getAccount(){
 		return this.accNum;
 	}
@@ -34,11 +38,8 @@ public class Account {
 	public int getMoney() {
 		return this.money;
 	}
+
 	
-////	값 수정하기 : set
-////	set(타겟인덱스, 수정할 값)
-//	myVector.set(1, 100); // 1인덱스를 100인덱스로 변경
-//	System.out.println(myVector.get(1));
 	
 	public String setAccount(Account account) {
 		return null;

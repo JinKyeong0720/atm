@@ -14,10 +14,9 @@ public class AccountManager {
 	
 	// Read
 	public Account getAccount(int index) {
-		// 사본 제공해줘야 함
 		Account account = list.get(index);
 		
-		Account reqObj = new Account(null, index);
+		Account reqObj = new Account(null, null, index);
 		return reqObj;
 	}
 	
@@ -31,6 +30,4 @@ public class AccountManager {
 	public void deleteAccount(int index) {
 		list.remove(index);
 	}
-
-	
 }

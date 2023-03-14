@@ -12,14 +12,16 @@ public class UserManager {
 		this.list.add(user);
 	}
 	
-	//sdfasdf
-	
 	// Read
 	public User getUser(int index) {
-		User user = this.list.get(index);
+		User user = list.get(index);
+		
+		String id = user.getId();
+		String password = user.getPassword();
+		String name = user.getName();
 		
 		// 사본 제공
-		User reqObj = new User(null, null, null);
+		User reqObj = new User(id, password, name);
 		return reqObj;
 	}
 	
@@ -28,20 +30,38 @@ public class UserManager {
 		return getUser(index);
 	}
 	
+	public ArrayList<User> getUserList(){
+		return list;
+	}
+	
+	// 인덱스 찾는 클래스
 	
 	// Update
 	public void setUser(int index, User user) {
-		this.list.set(index, user);
+		list.set(index, user);
 	}
 	
 	// Delete 
 	public void deleteUser(int index) {
-		this.list.remove(index);
+		list.remove(index);
 	}
 	
 	public void deleteUserById(String id) {
-		// 
+	
 	}
+
+	public int indexOf(String id) {
+		int index = -1;
+		
+		for(int i=0; i<list.size(); i++) {
+			if(id.equals(list.get(i).getId())) {
+				index = i;
+			}
+		}
+		return index;
+	}
+	
+
 
 }
  
