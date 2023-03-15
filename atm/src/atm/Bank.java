@@ -34,6 +34,7 @@ public class Bank {
 	}
 
 	private void printMainMenu() {
+		System.out.println();
 		System.out.println("=== " + this.brandName + " ===");
 		System.out.println("1. 회원가입");
 		System.out.println("2. 회원탈퇴");
@@ -91,7 +92,7 @@ public class Bank {
 			System.out.print("가입할 name : ");
 			String name = this.scan.next();
 			
-			User user = new User(id, password, name, null);
+			User user = new User(id, password, name);
 			if(this.um.addUser(user) != null) {
 				System.out.println("회원가입 성공!");
 			} else {
@@ -101,18 +102,6 @@ public class Bank {
 			System.out.println("이미 로그인 되었습니다.");
 		}
 	}
-	
-	
-//	private boolean checkDupl(String id) { // id 중복확인
-//		ArrayList<User> userList = um.getUserList();
-//		for(User UserManager : userList) {
-//			if(id.equals(UserManager.getId())){
-//				return true;
-//			}
-//		}
-//		return false;
-//
-//	}
 	
 	private void leaveUser() { // 2. 회원탈퇴
 		if(isLoggedIn(this.log)) {
@@ -144,8 +133,8 @@ public class Bank {
 			String password = this.scan.next();
 			
 			int index = -1;
-			for(User usermanager : um.getUserList()) {
-				if(id.equals(usermanager.getId()) && password.equals(usermanager.getPassword())) {
+			for(int i=0; i<um.getUserSize(); i++) {
+				if(id.equals(um.getUser(i).getId()) && password.equals(um.getUser(i).getPassword())) {
 					index = findIndex(id);
 					log = index;
 					System.out.println("로그인 성공!");
@@ -203,54 +192,46 @@ public class Bank {
 		System.out.println("6. 이체");
 		System.out.println("0. 뒤로가기");
 	}
-	
-	
-	private void createAccount() { // 1. 계좌 생성
+
+	private void createAccount() {
 		if (isLoggedIn(log)) {
-			System.out.print("id 재확인: ");
-			String id = this.scan.next();
-			System.out.print("password 재확인 : ");
-			String password = this.scan.next();
+			// 복제본 반환 받음
+			User user = this.um.getUserById(um.getUser(log).getId());
 
-			// 복제본 반환받음
-			User user = this.um.getUserById(id);
-
-			if (user != null) {
-				if (user.getPassword().equals(password)) {
-					if (user.getAccountSize() < Account.LIMIT) {
-						Account account = this.am.createAccount(new Account(id));
-						this.um.setUser(user, account);
-						this.am.accNumGenerator();
-						System.out.println("acocunt : " + account); // 주소 출력됨
-						// ㄴ 포매터(오버라이드 : 재정의하는 것)
-						
-						System.out.println("계좌번호 생성 완료!");
-					} else {
-						System.out.println("계좌는 최대 3개까지 개설 가능합니다.");
-					}
-				} else {
-					System.out.println("비밀번호가 일치하지 않습니다.");
-				}
+			if (user.getAccountSize() < Account.LIMIT) {
+				Account account = this.am.createAccount(new Account(um.getUser(log).getId()));
+				this.um.setUser(user, account);
+				
+				System.out.println("계좌 : " + account.getAccNum()); 
+				System.out.println("계좌 생성 완료!");
 			} else {
-				System.out.println("회원정보를 다시 확인하세요.");
+				System.out.println("계좌 최대 생성 개수는 3개입니다.");
 			}
 		} else {
-			System.out.println("로그인 후 이용 가능합니다.");
+			System.out.println("로그인 후 이용 가능합니다");
 		}
 	}
 	
-
-	
 	
 	private void deleteAccount() { // 2. 계좌 삭제
-		if(isLoggedIn(log)) {
-//			if( > 0) {
-//			am.deleteAccount(log);
-//			
-//				System.out.println("계좌가 삭제되었습니다.");
-//			} else {
-//				System.out.println("삭제할 계좌가 존재하지 않습니다;");
-//			}
+		if (isLoggedIn(log)) {
+			User user = um.getUser(log);
+			if (user.getAccountSize() > 0) { // 1개 이상 등록됐을 떄
+				
+				for(int i=0; i<user.getAccountSize(); i++) {
+					System.out.printf("계좌 : %s\n", am.getAccount(i).getAccNum());
+				}
+				
+				System.out.print("삭제할 계좌 선택 : ");
+				int selectDeleteAcc = scan.nextInt()-1;
+				am.deleteAccount(selectDeleteAcc);
+				um.deleteUserAccount(selectDeleteAcc, this.log);
+				
+				
+				System.out.println("계좌가 삭제되었습니다.");
+			} else {
+				System.out.println("삭제할 계좌가 존재하지 않습니다;");
+			}
 		} else {
 			System.out.println("로그인 후 이용 가능합니다.");
 		}

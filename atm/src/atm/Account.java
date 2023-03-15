@@ -2,7 +2,7 @@ package atm;
 
 public class Account {
 	
-	public static int LIMIT = 3; // 계좌 생성 시 최대 3개
+	public static int LIMIT = 3;
 	
 	private String userId;
 	private String accNum;
@@ -17,24 +17,25 @@ public class Account {
 		this.accNum = accNum;
 		this.money = money;
 	}
-	
+
 	public String getUserId() {
 		return userId;
 	}
-	
-	public String getAccNum(){
+
+	public String getAccNum() {
 		return accNum;
 	}
-	
+
 	public void setAccNum(String accNum) {
 		this.accNum = accNum;
 	}
-	
+
 	public int getMoney() {
-		return this.money;
+		return money;
 	}
-	
+
 	public void setMoney(int money) {
 		this.money = money;
 	}
+	
 }
