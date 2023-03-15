@@ -7,48 +7,34 @@ public class Account {
 	private String userId;
 	private String accNum;
 	private int money;
-	private int code;
 	
-	public Account(String userId, String account, int money) {
+	public Account(String userId) {
 		this.userId = userId;
-		this.accNum = account;
+	}
+	
+	public Account(String userId, String accNum, int money) {
+		this.userId = userId;
+		this.accNum = accNum;
 		this.money = money;
-	}
-
-	public String userId() {
-		return this.userId;
-	}
-	
-	public String account() {
-		return this.accNum;
-	}
-	
-	public int money() {
-		return this.money;
 	}
 	
 	public String getUserId() {
-		return this.userId;
+		return userId;
 	}
 	
-	public String getAccount(){
-		return this.accNum;
+	public String getAccNum(){
+		return accNum;
+	}
+	
+	public void setAccNum(String accNum) {
+		this.accNum = accNum;
 	}
 	
 	public int getMoney() {
 		return this.money;
 	}
-
 	
-	
-	public String setAccount(Account account) {
-		return null;
+	public void setMoney(int money) {
+		this.money = money;
 	}
-	
-	public int setMoney(Account account) {
-		return 0;
-	}
-	
-
-	
 }
