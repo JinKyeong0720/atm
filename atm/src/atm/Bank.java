@@ -14,11 +14,10 @@ public class Bank {
 	
 	private static final int JOIN = 1;
 	private static final int LEAVE = 2;
-	private static final int MAKEACCOUNT = 3;
-	private static final int DELETEACCOUNT = 4;
-	private static final int LOGIN = 5;
-	private static final int LOGOUT = 6;
-	private static final int BANKING = 7;
+	private static final int LOGIN = 3;
+	private static final int LOGOUT = 4;
+	private static final int BANKING = 5;
+	private static final int FILE = 6;
 	private static final int QUIT = 0;
 	
 	private int log;
@@ -35,17 +34,32 @@ public class Bank {
 	}
 
 	private void printMainMenu() {
-		System.out.println("===" + this.brandName + "===");
+		System.out.println("=== " + this.brandName + " ===");
 		System.out.println("1. 회원가입");
 		System.out.println("2. 회원탈퇴");
-		System.out.println("3. 계좌신청");
-		System.out.println("4. 계좌철회");
-		System.out.println("5. 로그인");
-		System.out.println("6. 로그아웃");
-		System.out.println("7. 뱅킹");
-		System.out.println("0. 시스템 종료");
+		System.out.println("3. 로그인");
+		System.out.println("4. 로그아웃");
+		System.out.println("5. 뱅킹 시스템");
+		System.out.println("6. 파일 시스템");
+		System.out.println("0. 종료");
 	}
 	
+	public void run() {
+		while(true) {
+			printMainMenu();
+			int menu = inputNumber();
+			
+			if (menu == 1) joinUser();
+			else if(menu == 2) leaveUser();
+			else if(menu == 3) logIn();
+			else if(menu == 4) logOut();
+			else if(menu == 5) banking();
+//			else if(menu == 6) file();
+			else if(menu == 0) break;
+		}
+		System.out.println("시스템이 종료되었습니다.");
+	}
+
 	private int inputNumber() {
 		int number = -1;
 		
@@ -60,31 +74,21 @@ public class Bank {
 		return number;
 	}
 	
-	public void run() {
-		while(true) {
-			printMainMenu();
-			int menu = inputNumber();
-			
-			if (menu == 1) joinUser();
-			else if(menu == 2) leaveUser();
-			else if(menu == 3) createAccount();
-			else if(menu == 4) deleteAccount();
-			else if(menu == 5) logIn();
-			else if(menu == 6) logOut();
-			else if(menu == 7) banking();
-			else if(menu == 0) break;
+	private boolean isLoggedIn(int log) {
+		if(this.log == -1) {
+			return false;
 		}
-		System.out.println("시스템이 종료되었습니다.");
+		return true;
 	}
-
 	
-	private void joinUser() {  // 1. 회원가입 O
+	
+	private void joinUser() {  // 1. 회원가입
 		if(!isLoggedIn(log)) {
-			System.out.print("id : ");
+			System.out.print("가입할 id : ");
 			String id = this.scan.next();
-			System.out.print("password : ");
+			System.out.print("가입할 password : ");
 			String password = this.scan.next();
-			System.out.print("name : ");
+			System.out.print("가입할 name : ");
 			String name = this.scan.next();
 			
 			User user = new User(id, password, name, null);
@@ -110,14 +114,7 @@ public class Bank {
 //
 //	}
 	
-	private boolean isLoggedIn(int log) {
-		if(this.log == -1) {
-			return false;
-		}
-		return true;
-	}
-	
-	private void leaveUser() { // 2. 회원탈퇴 
+	private void leaveUser() { // 2. 회원탈퇴
 		if(isLoggedIn(this.log)) {
 			System.out.println("password 재확인 : ");
 			String password = this.scan.next();
@@ -138,11 +135,77 @@ public class Bank {
 			System.out.println("로그인 후 이용할 수 있습니다.");
 		}
 	}
-
 	
+	private void logIn() { // 3. 로그인
+		if(!isLoggedIn(this.log)) {
+			System.out.print("id : ");
+			String id = this.scan.next();
+			System.out.print("password : ");
+			String password = this.scan.next();
+			
+			int index = -1;
+			for(User usermanager : um.getUserList()) {
+				if(id.equals(usermanager.getId()) && password.equals(usermanager.getPassword())) {
+					index = findIndex(id);
+					log = index;
+					System.out.println("로그인 성공!");
+				} else {
+					System.out.println("비밀번호를 다시 확인하세요.");
+				}
+			}
+		} else {
+			System.out.println("이미 로그인 상태입니다.");
+		}
+	}
+	
+	private int findIndex(String id) {
+		return this.um.indexOfById(id);
+	}
 
-	private void createAccount() { // 3. 계좌 생성
+	private void logOut() { // 4. 로그아웃
+		if(log != -1) {
+			log = -1;
+			System.out.println("로그아웃 되었습니다.");
+		} else {
+			System.out.println("로그인 상태가 아닙니다.");
+		}
+	}
 
+	private void banking() { // 5. 뱅킹
+		while (true) {
+			printBankingMenu();
+			int menu = inputNumber();
+
+			if(menu == 1) // 계좌 신청
+				createAccount();
+			else if(menu == 2) // 계좌 철회
+				deleteAccount();
+			else if (menu == 3) // 입금
+				inputMoney();
+			else if (menu == 4) // 출금
+				outputMoney();
+			else if (menu == 5) // 조회
+				infoAccount();
+			else if (menu == 6) // 이체
+				sendMoney();
+			else if (menu == 0) // 뒤로가기
+				break;
+		}
+	}
+
+	private void printBankingMenu() {
+		System.out.println("=== Banking ===");
+		System.out.println("1. 계좌 생성");
+		System.out.println("2. 계좌 철회");
+		System.out.println("3. 입금");
+		System.out.println("4. 출금");
+		System.out.println("5. 조회");
+		System.out.println("6. 이체");
+		System.out.println("0. 뒤로가기");
+	}
+	
+	
+	private void createAccount() { // 1. 계좌 생성
 		if (isLoggedIn(log)) {
 			System.out.print("id 재확인: ");
 			String id = this.scan.next();
@@ -157,6 +220,11 @@ public class Bank {
 					if (user.getAccountSize() < Account.LIMIT) {
 						Account account = this.am.createAccount(new Account(id));
 						this.um.setUser(user, account);
+						this.am.accNumGenerator();
+						System.out.println("acocunt : " + account); // 주소 출력됨
+						// ㄴ 포매터(오버라이드 : 재정의하는 것)
+						
+						System.out.println("계좌번호 생성 완료!");
 					} else {
 						System.out.println("계좌는 최대 3개까지 개설 가능합니다.");
 					}
@@ -171,10 +239,15 @@ public class Bank {
 		}
 	}
 	
-	private void deleteAccount() { // 4. 계좌 철회
+
+	
+	
+	private void deleteAccount() { // 2. 계좌 삭제
 		if(isLoggedIn(log)) {
-//			if( > 0) { // 삭제할 계좌가 존재할 때
-//				eraseAccount();
+//			if( > 0) {
+//			am.deleteAccount(log);
+//			
+//				System.out.println("계좌가 삭제되었습니다.");
 //			} else {
 //				System.out.println("삭제할 계좌가 존재하지 않습니다;");
 //			}
@@ -183,95 +256,46 @@ public class Bank {
 		}
 	}
 
-	
-	private void logIn() { // 5. 로그인 O
-		if(!isLoggedIn(this.log)) {
-			System.out.print("id : ");
-			String id = this.scan.next();
-			System.out.print("password : ");
-			String password = this.scan.next();
-			
-//			ArrayList<User> userList = um.getUserList();
-			int index = -1;
-			for(User usermanager : um.getUserList()) {
-				if(id.equals(usermanager.getId()) && password.equals(usermanager.getPassword())) {
-					index = findIndex(id);
-					log = index;
-					System.out.println("로그인 성공!");
-				} else {
-					System.out.println("비밀번호를 다시 확인하세요");
-				}
-			}
-		} else {
-			System.out.println("이미 로그인 상태입니다.");
-		}
-	}
-	
-//	private boolean checkDupl(String id) { // id 중복확인
-//		ArrayList<User> userList = um.getUserList();
-//		for(User UserManager : userList) {
-//			if(id.equals(UserManager.getId())){
-//				return true;
-//			}
-//		}
-//		return false;
-//
-//	}
-	
-	private int findIndex(String id) {
-		return this.um.indexOfById(id);
-	}
-
-	private void logOut() { // 6. 로그아웃 O
-		if(log != -1) {
-			log = -1;
-			System.out.println("로그아웃 되었습니다.");
-		} else {
-			System.out.println("로그인 상태가 아닙니다.");
-		}
-	}
-
-	private void banking() { // 7. 뱅킹
-		while (true) {
-			printBankingMenu();
-			int menu = inputNumber();
-
-			if (menu == 1)
-				inputMoney();
-			else if (menu == 2)
-				outputMoney();
-			else if (menu == 3)
-				infoAccount();
-			else if (menu == 4)
-				sendMoney();
-			else if (menu == 0)
-				break;
-		}
-	}
-
-	private void printBankingMenu() {
-		System.out.println("===Banking===");
-		System.out.println("1. 입금");
-		System.out.println("2. 출금");
-		System.out.println("3. 조회");
-		System.out.println("4. 이체");
-		System.out.println("0. 뒤로가기");
-	}
-
 	private void inputMoney() { // 입금
-
+		if(isLoggedIn(log)) {
+			System.out.println("입금할 금액 : ");
+			
+		} else {
+			System.out.println("로그인 후 이용 가능합니다.");
+		}
 	}
 	
 	private void outputMoney() { // 출금
+		if(isLoggedIn(log)) {
+			System.out.println("출금할 금액 : ");
+//			if() { // 입금할 금액 > 0
+//				
+//			} else {
+//				System.out.println("1원 이상부터 입금할 수 있습니다.");
+//			}
+		} else {
+			System.out.println("로그인 후 이용가능합니다.");
+		}
 		
 	}
 	
 	private void infoAccount() { // 조회
-		
+		if(isLoggedIn(log)) {
+			
+		} else {
+			System.out.println("로그인 후 이용가능합니다.");
+		}
 	}
 	
 	private void sendMoney() { // 이체
-		
+		if(isLoggedIn(log)) {
+			System.out.println("이체할 계좌번호 : ");
+			// if 유효한 계좌번호일 때
+			System.out.println("이체할 금액 : ");
+			// else sysout 계좌번호를 다시 확인해주세요
+		} else {
+			System.out.println("로그인 후 이용가능합니다.");
+		}
 	}
 	
 }

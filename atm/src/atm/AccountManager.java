@@ -45,7 +45,7 @@ public class AccountManager {
 		list.remove(index);
 	}
 	
-	private String accNumGenerator() {
+	public String accNumGenerator() {
 		// ####-####
 		String num = "";
 		
@@ -62,4 +62,11 @@ public class AccountManager {
 		}
 		return num;
 	}
+	
+	@Override
+	public String toString() { // 계좌 생성 시 오버라이드
+		// TODO Auto-generated method stub
+		return super.toString();
+	}
+	
 }
