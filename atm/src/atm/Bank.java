@@ -217,16 +217,13 @@ public class Bank {
 		if (isLoggedIn(log)) {
 			User user = um.getUser(log);
 			if (user.getAccountSize() > 0) { // 1개 이상 등록됐을 떄
-				
 				for(int i=0; i<user.getAccountSize(); i++) {
 					System.out.printf("계좌 : %s\n", am.getAccount(i).getAccNum());
 				}
-				
 				System.out.print("삭제할 계좌 선택 : ");
 				int selectDeleteAcc = scan.nextInt()-1;
 				am.deleteAccount(selectDeleteAcc);
 				um.deleteUserAccount(selectDeleteAcc, this.log);
-				
 				
 				System.out.println("계좌가 삭제되었습니다.");
 			} else {
@@ -240,7 +237,7 @@ public class Bank {
 	private void inputMoney() { // 입금
 		if(isLoggedIn(log)) {
 			System.out.println("입금할 금액 : ");
-			
+			// 로그인한 계정 log -> 
 		} else {
 			System.out.println("로그인 후 이용 가능합니다.");
 		}
@@ -273,10 +270,10 @@ public class Bank {
 			System.out.println("이체할 계좌번호 : ");
 			// if 유효한 계좌번호일 때
 			System.out.println("이체할 금액 : ");
-			// else sysout 계좌번호를 다시 확인해주세요
+			// else 
+			System.out.println("계좌번호를 다시 확인하세요"); 
 		} else {
 			System.out.println("로그인 후 이용가능합니다.");
 		}
 	}
-	
 }
